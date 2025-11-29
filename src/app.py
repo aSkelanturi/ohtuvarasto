@@ -21,20 +21,29 @@ def create_warehouse():
     """Create a new warehouse."""
     if request.method == 'POST':
         name = request.form.get('name', '').strip()
+        capacity_str = request.form.get('capacity', '')
+        initial_balance_str = request.form.get('initial_balance', '0')
+        
+        form_data = {
+            'name': name,
+            'capacity': capacity_str,
+            'initial_balance': initial_balance_str
+        }
+        
         try:
-            capacity = float(request.form.get('capacity', 0))
-            initial_balance = float(request.form.get('initial_balance', 0))
+            capacity = float(capacity_str) if capacity_str else 0
+            initial_balance = float(initial_balance_str) if initial_balance_str else 0
         except ValueError:
             flash('Invalid capacity or initial balance value.', 'error')
-            return render_template('create_warehouse.html')
+            return render_template('create_warehouse.html', form_data=form_data)
 
         if not name:
             flash('Warehouse name is required.', 'error')
-            return render_template('create_warehouse.html')
+            return render_template('create_warehouse.html', form_data=form_data)
 
         if name in warehouses:
             flash('A warehouse with this name already exists.', 'error')
-            return render_template('create_warehouse.html')
+            return render_template('create_warehouse.html', form_data=form_data)
 
         warehouses[name] = Varasto(capacity, initial_balance)
         flash(f'Warehouse "{name}" created successfully.', 'success')
@@ -65,23 +74,30 @@ def edit_warehouse(name):
 
     if request.method == 'POST':
         new_name = request.form.get('name', '').strip()
+        capacity_str = request.form.get('capacity', '')
+        
+        edit_form = {
+            'name': new_name,
+            'capacity': capacity_str
+        }
+        
         try:
-            new_capacity = float(request.form.get('capacity', 0))
+            new_capacity = float(capacity_str) if capacity_str else 0
         except ValueError:
             flash('Invalid capacity value.', 'error')
-            return render_template('edit_warehouse.html', name=name, warehouse=warehouse)
+            return render_template('view_warehouse.html', name=name, warehouse=warehouse, edit_form=edit_form)
 
         if not new_name:
             flash('Warehouse name is required.', 'error')
-            return render_template('edit_warehouse.html', name=name, warehouse=warehouse)
+            return render_template('view_warehouse.html', name=name, warehouse=warehouse, edit_form=edit_form)
 
         if new_name != name and new_name in warehouses:
             flash('A warehouse with this name already exists.', 'error')
-            return render_template('edit_warehouse.html', name=name, warehouse=warehouse)
+            return render_template('view_warehouse.html', name=name, warehouse=warehouse, edit_form=edit_form)
 
         if new_capacity <= 0:
             flash('Capacity must be greater than 0.', 'error')
-            return render_template('edit_warehouse.html', name=name, warehouse=warehouse)
+            return render_template('view_warehouse.html', name=name, warehouse=warehouse, edit_form=edit_form)
 
         # Create a new warehouse with updated capacity, preserving balance
         current_balance = min(warehouse.saldo, new_capacity)
@@ -98,7 +114,7 @@ def edit_warehouse(name):
 
         return redirect(url_for('view_warehouse', name=new_name))
 
-    return render_template('edit_warehouse.html', name=name, warehouse=warehouse)
+    return render_template('view_warehouse.html', name=name, warehouse=warehouse)
 
 
 @app.route('/warehouse/<name>/add', methods=['POST'])

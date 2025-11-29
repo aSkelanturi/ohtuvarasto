@@ -22,7 +22,7 @@ class TestIndexPage:
         """Test that the index page loads successfully."""
         response = client.get('/')
         assert response.status_code == 200
-        assert b'Warehouse Manager' in response.data
+        assert b'Iron Warehouse' in response.data
 
     def test_index_shows_empty_state_when_no_warehouses(self, client):
         """Test that the index shows empty state when there are no warehouses."""
@@ -48,7 +48,7 @@ class TestCreateWarehouse:
         """Test that the create warehouse page loads."""
         response = client.get('/warehouse/create')
         assert response.status_code == 200
-        assert b'Create New Warehouse' in response.data
+        assert b'Summon New Warehouse' in response.data
 
     def test_create_warehouse_successfully(self, client):
         """Test creating a warehouse successfully."""

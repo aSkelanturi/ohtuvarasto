@@ -1,17 +1,14 @@
 {% extends "base.html" %}
 
-{% block title %}{{ name }} - Warehouse Manager{% endblock %}
+{% block title %}{{ name }} - Iron Warehouse{% endblock %}
 
 {% block content %}
 <div class="card">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
-        <h2>{{ name }}</h2>
-        <div style="display: flex; gap: 0.5rem;">
-            <a href="{{ url_for('edit_warehouse', name=name) }}" class="btn btn-secondary">Edit</a>
-            <form action="{{ url_for('delete_warehouse', name=name) }}" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this warehouse?');">
-                <button type="submit" class="btn btn-danger">Delete</button>
-            </form>
-        </div>
+        <h2>🦇 {{ name }}</h2>
+        <form action="{{ url_for('delete_warehouse', name=name) }}" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this warehouse?');">
+            <button type="submit" class="btn btn-danger">Delete</button>
+        </form>
     </div>
     
     <div class="stats">
@@ -33,11 +30,31 @@
         {% set fill_percent = (warehouse.saldo / warehouse.tilavuus * 100) if warehouse.tilavuus > 0 else 0 %}
         <div class="progress-fill" style="width: {{ fill_percent }}%"></div>
     </div>
-    <p style="text-align: center; color: #666; margin-bottom: 1.5rem;">{{ "%.1f"|format(fill_percent) }}% full</p>
+    <p style="text-align: center; color: #bb8fce; margin-bottom: 1.5rem;">{{ "%.1f"|format(fill_percent) }}% full</p>
+    
+    <div class="edit-section">
+        <h3 style="color: #d7bde2; margin-bottom: 1rem;">⚙️ Edit Warehouse</h3>
+        <form action="{{ url_for('edit_warehouse', name=name) }}" method="post">
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <div class="form-group" style="flex: 1; min-width: 200px;">
+                    <label for="edit_name">Name</label>
+                    <input type="text" id="edit_name" name="name" required value="{{ edit_form.name if edit_form else name }}">
+                </div>
+                <div class="form-group" style="flex: 1; min-width: 200px;">
+                    <label for="edit_capacity">Capacity</label>
+                    <input type="number" id="edit_capacity" name="capacity" required min="0.01" step="0.01" value="{{ edit_form.capacity if edit_form else warehouse.tilavuus }}">
+                </div>
+                <div style="display: flex; align-items: flex-end;">
+                    <button type="submit" class="btn btn-primary">Save Changes</button>
+                </div>
+            </div>
+        </form>
+    </div>
 </div>
 
 <div class="card">
-    <h2>Add Content</h2>
+    <h2>🎸 Add Content</h2>
+    <p class="sabbath-quote">"Children of the Grave" need storage too!</p>
     <form action="{{ url_for('add_content', name=name) }}" method="post" class="inline-form">
         <div class="form-group">
             <label for="add_amount">Amount to Add</label>
@@ -48,7 +65,8 @@
 </div>
 
 <div class="card">
-    <h2>Remove Content</h2>
+    <h2>🔥 Remove Content</h2>
+    <p class="sabbath-quote">"Into the void..." goes your inventory!</p>
     <form action="{{ url_for('remove_content', name=name) }}" method="post" class="inline-form">
         <div class="form-group">
             <label for="remove_amount">Amount to Remove</label>
