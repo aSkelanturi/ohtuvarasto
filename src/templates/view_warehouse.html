@@ -34,6 +34,7 @@
     
     <div class="edit-section">
         <h3 style="color: #d7bde2; margin-bottom: 1rem;">⚙️ Edit Warehouse</h3>
+        <p class="sabbath-quote">"Computer God" controls your storage - Dehumanizer</p>
         <form action="{{ url_for('edit_warehouse', name=name) }}" method="post">
             <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
                 <div class="form-group" style="flex: 1; min-width: 200px;">
@@ -54,7 +55,7 @@
 
 <div class="card">
     <h2>🎸 Add Content</h2>
-    <p class="sabbath-quote">"Children of the Grave" need storage too!</p>
+    <p class="sabbath-quote">"Sabbath Bloody Sabbath" - Fill your warehouse with darkness!</p>
     <form action="{{ url_for('add_content', name=name) }}" method="post" class="inline-form">
         <div class="form-group">
             <label for="add_amount">Amount to Add</label>
@@ -66,7 +67,7 @@
 
 <div class="card">
     <h2>🔥 Remove Content</h2>
-    <p class="sabbath-quote">"Into the void..." goes your inventory!</p>
+    <p class="sabbath-quote">"Virtual Death" awaits your inventory - Cross Purposes</p>
     <form action="{{ url_for('remove_content', name=name) }}" method="post" class="inline-form">
         <div class="form-group">
             <label for="remove_amount">Amount to Remove</label>
