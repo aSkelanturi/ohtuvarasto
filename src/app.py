@@ -1,9 +1,10 @@
 """Flask web application for warehouse management."""
+import os
 from flask import Flask, render_template, request, redirect, url_for, flash
 from varasto import Varasto
 
 app = Flask(__name__)
-app.secret_key = 'warehouse-secret-key'
+app.secret_key = os.environ.get('SECRET_KEY', os.urandom(24))
 
 # Store warehouses in memory with names as keys
 warehouses = {}
@@ -82,20 +83,17 @@ def edit_warehouse(name):
             flash('Capacity must be greater than 0.', 'error')
             return render_template('edit_warehouse.html', name=name, warehouse=warehouse)
 
-        # Update capacity (keeping the same balance if possible)
-        current_balance = warehouse.saldo
-        warehouse.tilavuus = new_capacity
-        if current_balance > new_capacity:
-            warehouse.saldo = new_capacity
-        else:
-            warehouse.saldo = current_balance
+        # Create a new warehouse with updated capacity, preserving balance
+        current_balance = min(warehouse.saldo, new_capacity)
+        new_warehouse = Varasto(new_capacity, current_balance)
 
         # Handle name change
         if new_name != name:
-            warehouses[new_name] = warehouse
+            warehouses[new_name] = new_warehouse
             del warehouses[name]
             flash(f'Warehouse renamed to "{new_name}" successfully.', 'success')
         else:
+            warehouses[name] = new_warehouse
             flash('Warehouse updated successfully.', 'success')
 
         return redirect(url_for('view_warehouse', name=new_name))
@@ -162,4 +160,4 @@ def delete_warehouse(name):
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False)
