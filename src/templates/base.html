@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Iron Warehouse - Black Sabbath Edition{% endblock %}</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            background-color: #1a1a2e;
+            color: #eee;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            background: linear-gradient(135deg, #2d1b4e 0%, #1a1a2e 50%, #4a1942 100%);
+            color: white;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid #9b59b6;
+        }
+        header h1 {
+            margin: 0;
+        }
+        header a {
+            color: #e8d5f2;
+            text-decoration: none;
+        }
+        nav {
+            margin-top: 0.5rem;
+        }
+        nav a {
+            color: #bb8fce;
+            margin-right: 1rem;
+        }
+        nav a:hover {
+            text-decoration: underline;
+            color: #d7bde2;
+        }
+        .flash-messages {
+            margin-bottom: 1rem;
+        }
+        .flash {
+            padding: 1rem;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+        .flash.success {
+            background-color: #2d1b4e;
+            color: #bb8fce;
+            border: 1px solid #9b59b6;
+        }
+        .flash.error {
+            background-color: #4a1942;
+            color: #f5b7b1;
+            border: 1px solid #c0392b;
+        }
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .btn-primary {
+            background-color: #8e44ad;
+            color: white;
+        }
+        .btn-primary:hover {
+            background-color: #9b59b6;
+        }
+        .btn-success {
+            background-color: #6c3483;
+            color: white;
+        }
+        .btn-success:hover {
+            background-color: #7d3c98;
+        }
+        .btn-danger {
+            background-color: #922b21;
+            color: white;
+        }
+        .btn-danger:hover {
+            background-color: #b03a2e;
+        }
+        .btn-secondary {
+            background-color: #5d6d7e;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background-color: #6c7a89;
+        }
+        .card {
+            background: linear-gradient(145deg, #2d1b4e 0%, #1a1a2e 100%);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 1px solid #4a1942;
+        }
+        .card h2 {
+            margin-bottom: 1rem;
+            color: #d7bde2;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: #bb8fce;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #9b59b6;
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: #1a1a2e;
+            color: #eee;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #d7bde2;
+            box-shadow: 0 0 5px rgba(155, 89, 182, 0.5);
+        }
+        .warehouse-list {
+            list-style: none;
+        }
+        .warehouse-item {
+            background: linear-gradient(145deg, #2d1b4e 0%, #1a1a2e 100%);
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #4a1942;
+        }
+        .warehouse-info h3 {
+            margin-bottom: 0.5rem;
+            color: #d7bde2;
+        }
+        .warehouse-info p {
+            color: #bb8fce;
+        }
+        .warehouse-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        .progress-bar {
+            background-color: #1a1a2e;
+            border-radius: 4px;
+            height: 20px;
+            overflow: hidden;
+            margin: 0.5rem 0;
+            border: 1px solid #4a1942;
+        }
+        .progress-fill {
+            background: linear-gradient(90deg, #8e44ad 0%, #9b59b6 50%, #6c3483 100%);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .stat-item {
+            background: #1a1a2e;
+            padding: 1rem;
+            border-radius: 4px;
+            text-align: center;
+            border: 1px solid #4a1942;
+        }
+        .stat-item .value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #d7bde2;
+        }
+        .stat-item .label {
+            color: #bb8fce;
+            font-size: 0.9rem;
+        }
+        .inline-form {
+            display: flex;
+            gap: 0.5rem;
+            align-items: flex-end;
+        }
+        .inline-form .form-group {
+            margin-bottom: 0;
+            flex: 1;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #bb8fce;
+        }
+        .empty-state h3 {
+            margin-bottom: 1rem;
+            color: #d7bde2;
+        }
+        .sabbath-quote {
+            font-style: italic;
+            color: #9b59b6;
+            text-align: center;
+            padding: 0.5rem;
+            font-size: 0.9rem;
+        }
+        .edit-section {
+            border-top: 1px solid #4a1942;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1><a href="{{ url_for('index') }}">🦇 Iron Warehouse</a></h1>
+            <p class="sabbath-quote">"Heaven and Hell" - Dio era, 1980</p>
+            <nav>
+                <a href="{{ url_for('index') }}">All Warehouses</a>
+                <a href="{{ url_for('create_warehouse') }}">Create New</a>
+            </nav>
+        </div>
+    </header>
+    <main class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages">
+                    {% for category, message in messages %}
+                        <div class="flash {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+        {% block content %}{% endblock %}
+    </main>
+</body>
+</html>

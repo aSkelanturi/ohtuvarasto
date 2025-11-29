@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Create Warehouse - Iron Warehouse{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>🎸 Summon New Warehouse</h2>
+    <p class="sabbath-quote">"Hole in the Sky" - Sabotage, 1975</p>
+    <form method="post">
+        <div class="form-group">
+            <label for="name">Warehouse Name</label>
+            <input type="text" id="name" name="name" required placeholder="Enter warehouse name" value="{{ form_data.name if form_data else '' }}">
+        </div>
+        <div class="form-group">
+            <label for="capacity">Capacity</label>
+            <input type="number" id="capacity" name="capacity" required min="0.01" step="0.01" placeholder="Enter maximum capacity" value="{{ form_data.capacity if form_data else '' }}">
+        </div>
+        <div class="form-group">
+            <label for="initial_balance">Initial Balance (optional)</label>
+            <input type="number" id="initial_balance" name="initial_balance" min="0" step="0.01" placeholder="Enter initial content amount" value="{{ form_data.initial_balance if form_data else '0' }}">
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+            <button type="submit" class="btn btn-success">Create Warehouse</button>
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}

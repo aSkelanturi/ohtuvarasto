@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}All Warehouses - Iron Warehouse{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>🎸 All Warehouses</h2>
+    <p class="sabbath-quote">"The world is full of Kings and Queens, who blind your eyes and steal your dreams" - Heaven and Hell</p>
+    
+    {% if warehouses %}
+        <ul class="warehouse-list">
+            {% for name, warehouse in warehouses.items() %}
+                <li class="warehouse-item">
+                    <div class="warehouse-info">
+                        <h3>{{ name }}</h3>
+                        <p>{{ warehouse }}</p>
+                        <div class="progress-bar">
+                            {% set fill_percent = (warehouse.saldo / warehouse.tilavuus * 100) if warehouse.tilavuus > 0 else 0 %}
+                            <div class="progress-fill" style="width: {{ fill_percent }}%"></div>
+                        </div>
+                    </div>
+                    <div class="warehouse-actions">
+                        <a href="{{ url_for('view_warehouse', name=name) }}" class="btn btn-primary">View</a>
+                        <form action="{{ url_for('delete_warehouse', name=name) }}" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this warehouse?');">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="empty-state">
+            <h3>No warehouses yet</h3>
+            <p>"Neon Knights" await! Create your first warehouse to begin.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
